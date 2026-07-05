@@ -19,37 +19,24 @@ background:#f5f5f5;
 
 header{
 background:linear-gradient(90deg,#ff6600,#ff9900);
-color:white;
+color:#fff;
 text-align:center;
-padding:25px;
-}
-
-header h1{
-font-size:35px;
-}
-
-header p{
-font-size:18px;
+padding:20px;
 }
 
 .products{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:20px;
-padding:30px;
+padding:20px;
 }
 
 .card{
-background:white;
-border-radius:15px;
+background:#fff;
+border-radius:12px;
 padding:15px;
+box-shadow:0 5px 10px rgba(0,0,0,.15);
 text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,.2);
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-8px);
 }
 
 .card img{
@@ -59,14 +46,11 @@ object-fit:cover;
 border-radius:10px;
 }
 
-.card h3{
-margin:10px 0;
-}
-
 .price{
 color:red;
 font-size:22px;
 font-weight:bold;
+margin:10px 0;
 }
 
 button{
@@ -75,90 +59,73 @@ color:white;
 border:none;
 padding:12px 20px;
 border-radius:30px;
-cursor:pointer;
 font-size:16px;
-margin-top:10px;
+cursor:pointer;
 }
 
 footer{
 background:#222;
-color:white;
+color:#fff;
 text-align:center;
 padding:20px;
 margin-top:20px;
 }
 </style>
-
 </head>
+
 <body>
 
 <header>
 <h1>🛍️ SK Sell</h1>
-<p>Best Deals | Best Price | WhatsApp Order</p>
+<p>Best Deals | WhatsApp Order</p>
 </header>
 
-<section class="products">
-
-<div class="card">
-<img src="https://picsum.photos/300/300?1">
-<h3>Skating Shoes</h3>
-<p class="price">₹999</p>
-<a href="https://wa.me/918709033711?text=I%20want%20to%20order%20Skating%20Shoes">
-<button>Order on WhatsApp</button>
-</a>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/300/300?2">
-<h3>Premium Jacket</h3>
-<p class="price">₹1499</p>
-<a href="https://wa.me/918709033711?text=I%20want%20to%20order%20Premium%20Jacket">
-<button>Order on WhatsApp</button>
-</a>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/300/300?3">
-<h3>Fashion Bracelet</h3>
-<p class="price">₹499</p>
-<a href="https://wa.me/918709033711?text=I%20want%20to%20order%20Fashion%20Bracelet">
-<button>Order on WhatsApp</button>
-</a>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/300/300?4">
-<h3>Smart Watch</h3>
-<p class="price">₹1299</p>
-<a href="https://wa.me/918709033711?text=I%20want%20to%20order%20Smart%20Watch">
-<button>Order on WhatsApp</button>
-</a>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/300/300?5">
-<h3>Wireless Earbuds</h3>
-<p class="price">₹899</p>
-<a href="https://wa.me/918709033711?text=I%20want%20to%20order%20Wireless%20Earbuds">
-<button>Order on WhatsApp</button>
-</a>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/300/300?6">
-<h3>Backpack</h3>
-<p class="price">₹799</p>
-<a href="https://wa.me/918709033711?text=I%20want%20to%20order%20Backpack">
-<button>Order on WhatsApp</button>
-</a>
-</div>
-
+<section class="products" id="products">
 </section>
 
 <footer>
-<h2>📞 WhatsApp: 8709033711</h2>
-<p>© 2026 SK Sell | Online Reselling Store</p>
+<h2>WhatsApp : 8709033711</h2>
 </footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "sksellsman.firebaseapp.com",
+  projectId: "sksellsman",
+  storageBucket: "sksellsman.firebasestorage.app",
+  messagingSenderId: "352576440091",
+  appId: "1:352576440091:web:c26b8daf51b1ec4fb335be"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const productsDiv = document.getElementById("products");
+
+async function loadProducts() {
+  const querySnapshot = await getDocs(collection(db, "Products"));
+
+  querySnapshot.forEach((doc) => {
+    const p = doc.data();
+
+    productsDiv.innerHTML += `
+      <div class="card">
+        <img src="${p.Image}">
+        <h3>${p.Name}</h3>
+        <p class="price">₹${p.Price}</p>
+        <a href="https://wa.me/918709033711?text=I want to order ${encodeURIComponent(p.Name)}">
+          <button>Order on WhatsApp</button>
+        </a>
+      </div>
+    `;
+  });
+}
+
+loadProducts();
+</script>
 
 </body>
 </html>
