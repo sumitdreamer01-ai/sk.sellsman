@@ -1,32 +1,47 @@
-const products = [
-  {
-    name: "Smart Watch",
-    price: "₹999",
-    image: "https://via.placeholder.com/200"
-  },
-  {
-    name: "Bluetooth Earbuds",
-    price: "₹799",
-    image: "https://via.placeholder.com/200"
-  },
-  {
-    name: "Sports Shoes",
-    price: "₹1299",
-    image: "https://via.placeholder.com/200"
-  }
-];
+async function loadProducts(category = "All") {
+  const response = await fetch("products.json");
+  const products = await response.json();
 
-const container = document.getElementById("products");
+  const container = document.getElementById("products");
+  container.innerHTML = "";
 
-products.forEach(product => {
-  container.innerHTML += `
-    <div style="background:#fff;padding:15px;border-radius:10px;text-align:center;">
-      <img src="${product.image}" width="100%">
-      <h3>${product.name}</h3>
-      <p>${product.price}</p>
-      <button style="padding:10px 20px;background:#2874f0;color:#fff;border:none;border-radius:5px;">
-        Order Now
-      </button>
-    </div>
-  `;
+  const searchText = document
+    .getElementById("search")
+    .value
+    .toLowerCase();
+
+  products
+    .filter(product => {
+      const matchCategory =
+        category === "All" || product.category === category;
+
+      const matchSearch =
+        product.name.toLowerCase().includes(searchText);
+
+      return matchCategory && matchSearch;
+    })
+    .forEach(product => {
+      container.innerHTML += `
+        <div class="card">
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>₹${product.price}</p>
+          <button onclick="alert('Order feature coming in next step')">
+            Order Now
+          </button>
+        </div>
+      `;
+    });
+}
+
+loadProducts();
+
+document.getElementById("search").addEventListener("input", () => {
+  loadProducts();
+});
+
+document.querySelectorAll("nav button").forEach(button => {
+  button.addEventListener("click", () => {
+    loadProducts(button.textContent);
+  });
 });
