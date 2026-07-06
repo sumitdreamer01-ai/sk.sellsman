@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Smart Watch",
+    "price": 999,
+    "category": "Meesho",
+    "image": "https://picsum.photos/300/300?random=1"
+  },
+  {
+    "id": 2,
+    "name": "Wireless Earbuds",
+    "price": 799,
+    "category": "Amazon",
+    "image": "https://picsum.photos/300/300?random=2"
+  },
+  {
+    "id": 3,
+    "name": "Sports Shoes",
+    "price": 1299,
+    "category": "Flipkart",
+    "image": "https://picsum.photos/300/300?random=3"
+  }
+]
